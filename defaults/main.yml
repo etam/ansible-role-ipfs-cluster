@@ -1,0 +1,4 @@
+ipfs_cluster_version: 1.0.4
+# /ipns/cluster.ipfs.io/documentation/reference/configuration/#manual-secret-generation
+#ipfs_cluster_secret: Create one using `od -vN 32 -An -tx1 /dev/urandom | tr -d ' \n'`
+ipfs_cluster_peer_ip: "{{ ansible_default_ipv4['address'] }}"

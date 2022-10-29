@@ -1,0 +1,8 @@
+- name: Restart ipfs-cluster
+  become: yes
+  systemd:
+    daemon_reload: yes
+    name: ipfs-cluster
+    enabled: yes
+    state: started
+  when: (ipfs_cluster_start | default({})) is not changed

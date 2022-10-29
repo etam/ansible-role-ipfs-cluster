@@ -1,0 +1,12 @@
+[Unit]
+Description=IPFS cluster daemon
+After=network-online.target ipfs.service
+Requires=ipfs.service
+
+[Service]
+User=ipfs
+ExecStart=/usr/local/bin/ipfs-cluster-service daemon
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
