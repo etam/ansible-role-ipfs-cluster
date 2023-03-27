@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: ipfs-cluster
+  role_name: ipfs_cluster
   author: Adam Mizerski
   description: Sets up IPFS Cluster nodes, with crdt and automaticly generated peers list.
 
