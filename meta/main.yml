@@ -1,0 +1,30 @@
+galaxy_info:
+  role_name: ipfs-cluster
+  author: Adam Mizerski
+  description: Sets up IPFS Cluster nodes, with crdt and automaticly generated peers list.
+
+  issue_tracker_url: https://codeberg.org/etam/ansible-role-ipfs-cluster/issues
+
+  license: GPL-3.0-or-later
+
+  min_ansible_version: 2.1
+
+  platforms:
+  - name: opensuse
+    versions:
+      - all
+  - name: Fedora
+    versions:
+      - all
+  - name: Ubuntu
+    versions:
+      - all
+  - name: Debian
+    versions:
+      - all
+
+  galaxy_tags:
+    - ipfs
+
+dependencies:
+  - etam.ipfs
