@@ -4,6 +4,7 @@ After=network-online.target ipfs.service
 Requires=ipfs.service
 
 [Service]
+Type=notify
 User=ipfs
 ExecStart=/usr/local/bin/ipfs-cluster-service daemon
 Restart=on-failure
