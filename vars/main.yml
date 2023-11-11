@@ -3,8 +3,8 @@ ipfs_cluster_arch_map:
   aarch64: arm64
 
 ipfs_cluster_common_release_url:
-  ctl: "dist.ipfs.io/ipfs-cluster-ctl/v{{ ipfs_cluster_version }}/ipfs-cluster-ctl_v{{ ipfs_cluster_version }}_linux-{{ ipfs_cluster_arch_map[ansible_architecture] }}.tar.gz"
-  service: "dist.ipfs.io/ipfs-cluster-service/v{{ ipfs_cluster_version }}/ipfs-cluster-service_v{{ ipfs_cluster_version }}_linux-{{ ipfs_cluster_arch_map[ansible_architecture] }}.tar.gz"
+  ctl: "dist.ipfs.tech/ipfs-cluster-ctl/v{{ ipfs_cluster_version }}/ipfs-cluster-ctl_v{{ ipfs_cluster_version }}_linux-{{ ipfs_cluster_arch_map[ansible_architecture] }}.tar.gz"
+  service: "dist.ipfs.tech/ipfs-cluster-service/v{{ ipfs_cluster_version }}/ipfs-cluster-service_v{{ ipfs_cluster_version }}_linux-{{ ipfs_cluster_arch_map[ansible_architecture] }}.tar.gz"
 ipfs_cluster_public_release_url:
   ctl: "https://{{ ipfs_cluster_common_release_url['ctl'] }}"
   service: "https://{{ ipfs_cluster_common_release_url['service'] }}"
