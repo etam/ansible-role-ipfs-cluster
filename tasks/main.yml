@@ -16,7 +16,7 @@
 - name: Download ipfs-cluster
   become: yes
   unarchive:
-    src: "{{ (ansible_facts.services[\"ipfs.service\"] is defined and ansible_facts.services[\"ipfs.service\"].state == \"running\") | ternary(ipfs_cluster_local_release_url[item], ipfs_cluster_public_release_url[item]) }}"
+    src: "{{ ((not ipfs_cluster_force_https_download) and (ansible_facts.services[\"ipfs.service\"] is defined and ansible_facts.services[\"ipfs.service\"].state == \"running\")) | ternary(ipfs_cluster_local_release_url[item], ipfs_cluster_public_release_url[item]) }}"
     dest: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}/"
     creates: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}/ipfs-cluster-{{ item }}"
     remote_src: yes

@@ -16,6 +16,7 @@ Features:
 - `ipfs_cluster_version`: (it's obvious)
 - `ipfs_cluster_secret`: Required. Create one using `od -vN 32 -An -tx1 /dev/urandom | tr -d ' \n'` (see also: [docs](/ipns/cluster.ipfs.io/documentation/reference/configuration/#manual-secret-generation))
 - `ipfs_cluster_peer_ip`: Peer IP (default: `ansible_default_ipv4`)
+- `ipfs_cluster_force_https_download`: Force downloading binary archive from https, even when service is running. Default: `no`.
 
 
 ## Dependencies
