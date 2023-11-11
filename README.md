@@ -1,9 +1,10 @@
 # IPFS Cluster
 
 Features:
-  - Automatic crdt and peers configuration.
-  - Downloads binaries for updates via local IPFS gateway, if already installed.
-  - Supports x86_64 and aarch64.
+
+- Automatic crdt and peers configuration.
+- Downloads binaries for updates via local IPFS gateway, if already installed.
+- Supports x86_64 and aarch64.
 
 
 ## Requirements
