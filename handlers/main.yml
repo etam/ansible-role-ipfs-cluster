@@ -4,5 +4,5 @@
     daemon_reload: yes
     name: ipfs-cluster
     enabled: yes
-    state: started
+    state: restarted
   when: (ipfs_cluster_start | default({})) is not changed
