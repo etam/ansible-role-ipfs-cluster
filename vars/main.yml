@@ -11,3 +11,11 @@ ipfs_cluster_public_release_url:
 ipfs_cluster_local_release_url:
   ctl: "http://localhost:8080/ipns/{{ ipfs_cluster_common_release_url['ctl'] }}"
   service: "http://localhost:8080/ipns/{{ ipfs_cluster_common_release_url['service'] }}"
+
+# TODO: can we avoid generating and parsing json back and forth?
+ipfs_cluster_peer_addresses_json: |
+  [
+  {% for host in groups['ipfs'] if host in ansible_play_hosts and host != inventory_hostname %}
+    "/ip4/{{ hostvars[host].ipfs_cluster_peer_ip }}/tcp/9096/ipfs/{{ hostvars[host].ipfs_cluster_id.value }}"{% if not loop.last %},{% endif %}
+  {% endfor %}
+  ]

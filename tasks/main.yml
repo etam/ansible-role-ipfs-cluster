@@ -99,12 +99,7 @@
     config:
       .cluster.peername: "{{ ansible_hostname }}"
       .cluster.secret: "{{ ipfs_cluster_secret }}"
-      .cluster.peer_addresses: |
-        [
-        {% for host in groups['ipfs'] if host in ansible_play_hosts and host != inventory_hostname %}
-          "/ip4/{{ hostvars[host].ipfs_cluster_peer_ip }}/tcp/9096/ipfs/{{ hostvars[host].ipfs_cluster_id.value }}",
-        {% endfor %}
-        ]
+      .cluster.peer_addresses: "{{ ipfs_cluster_peer_addresses_json | from_json }}"
   loop: "{{ config | dict2items }}"
   notify: Restart ipfs-cluster
 
