@@ -1,25 +1,27 @@
+---
 - name: Install jq
-  become: yes
-  package:
+  become: true
+  ansible.builtin.package:
     name: jq
     state: present
 
 - name: Get service facts
-  service_facts:
+  ansible.builtin.service_facts:
 
 - name: Create download directory
-  become: yes
-  file:
+  become: true
+  ansible.builtin.file:
     path: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}"
     state: directory
+    mode: "755"
 
 - name: Download ipfs-cluster
-  become: yes
-  unarchive:
+  become: true
+  ansible.builtin.unarchive:
     src: "{{ ((not ipfs_cluster_force_https_download) and (ansible_facts.services[\"ipfs.service\"] is defined and ansible_facts.services[\"ipfs.service\"].state == \"running\")) | ternary(ipfs_cluster_local_release_url[item], ipfs_cluster_public_release_url[item]) }}"
     dest: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}/"
     creates: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}/ipfs-cluster-{{ item }}"
-    remote_src: yes
+    remote_src: true
     owner: root
     group: root
   loop:
@@ -27,8 +29,8 @@
     - service
 
 - name: Link ipfs-cluster binary
-  become: yes
-  file:
+  become: true
+  ansible.builtin.file:
     src: "/usr/local/lib/ipfs-cluster-{{ ipfs_cluster_version }}/ipfs-cluster-{{ item }}/ipfs-cluster-{{ item }}"
     dest: "/usr/local/bin/ipfs-cluster-{{ item }}"
     state: link
@@ -38,17 +40,17 @@
   notify: Restart ipfs-cluster
 
 - name: Check if ipfs-cluster is initialized
-  become: yes
-  stat:
+  become: true
+  ansible.builtin.stat:
     path: "{{ ipfs_home_dir }}/.ipfs-cluster/service.json"
-    get_attributes: no
-    get_checksum: no
-    get_mime: no
+    get_attributes: false
+    get_checksum: false
+    get_mime: false
   register: ipfs_cluster_service_json
 
 - name: Check if consensus is crdt
   when: ipfs_cluster_service_json.stat.exists
-  become: yes
+  become: true
   jq:
     path: "{{ ipfs_home_dir }}/.ipfs-cluster/service.json"
     filter: '.consensus | has("crdt")'
@@ -56,67 +58,68 @@
 
 - name: Stop ipfs-cluster
   when: ipfs_cluster_service_json.stat.exists and not ipfs_cluster_is_crdt.value
-  become: yes
-  systemd:
+  become: true
+  ansible.builtin.systemd:
     name: ipfs-cluster
-    enabled: no
+    enabled: false
     state: stopped
 
 - name: Purge datadir
   when: ipfs_cluster_service_json.stat.exists and not ipfs_cluster_is_crdt.value
-  become: yes
-  file:
+  become: true
+  ansible.builtin.file:
     path: "{{ ipfs_home_dir }}/.ipfs-cluster"
     state: absent
 
-- name: ipfs-cluster init
-  become: yes
+- name: Ipfs-cluster init
+  become: true
   become_user: ipfs
-  command:
+  ansible.builtin.command:
     cmd: "/usr/local/bin/ipfs-cluster-service init --consensus crdt"
     creates: "{{ ipfs_home_dir }}/.ipfs-cluster/identity.json"
 
 - name: Get id
-  become: yes
+  become: true
   become_user: ipfs
   jq:
     path: "{{ ipfs_home_dir }}/.ipfs-cluster/identity.json"
-    filter: '.id'
+    filter: ".id"
   register: ipfs_cluster_id
 
 - name: Workaround issue 6189
   # https://github.com/ansible/ansible/issues/6189
-  set_fact:
+  ansible.builtin.set_fact:
     ipfs_cluster_peer_ip: "{{ ipfs_cluster_peer_ip }}"
 
 - name: Configure ipfs-cluster
-  become: yes
+  become: true
   jq:
     path: "{{ ipfs_home_dir }}/.ipfs-cluster/service.json"
     filter: "{{ item.key }} = {{ item.value | to_json }}"
-    modify: yes
+    modify: true
   vars:
     config:
-      .cluster.peername: "{{ ansible_hostname }}"
+      .cluster.peername: "{{ ansible_facts.hostname }}"
       .cluster.secret: "{{ ipfs_cluster_secret }}"
       .cluster.peer_addresses: "{{ ipfs_cluster_peer_addresses_json | from_json }}"
   loop: "{{ config | dict2items }}"
   notify: Restart ipfs-cluster
 
 - name: Install ipfs-cluster.service
-  become: yes
-  copy:
+  become: true
+  ansible.builtin.copy:
     src: ipfs-cluster.service
     dest: /etc/systemd/system/ipfs-cluster.service
     owner: root
     group: root
+    mode: "644"
   notify: Restart ipfs-cluster
 
 - name: Start ipfs-cluster
-  become: yes
-  systemd:
-    daemon_reload: yes
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
     name: ipfs-cluster
-    enabled: yes
+    enabled: true
     state: started
   register: ipfs_cluster_start

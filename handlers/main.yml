@@ -1,8 +1,9 @@
+---
 - name: Restart ipfs-cluster
-  become: yes
-  systemd:
-    daemon_reload: yes
+  become: true
+  ansible.builtin.systemd:
+    daemon_reload: true
     name: ipfs-cluster
-    enabled: yes
+    enabled: true
     state: restarted
   when: (ipfs_cluster_start | default({})) is not changed

@@ -1,3 +1,4 @@
+---
 galaxy_info:
   role_name: ipfs_cluster
   author: Adam Mizerski
@@ -7,18 +8,18 @@ galaxy_info:
 
   license: GPL-3.0-or-later
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.10"
 
   platforms:
-  - name: opensuse
-    versions:
-      - all
-  - name: Ubuntu
-    versions:
-      - all
-  - name: Debian
-    versions:
-      - all
+    - name: opensuse
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
 
   galaxy_tags:
     - ipfs
